@@ -1,10 +1,11 @@
 import { Handle, Position } from "reactflow";
-import { CustomNodeProps, CustomeNodeType } from "../../types/customNode.type";
+import { CustomNodeProps, CustomeNodeType } from "../../types/customNode.types";
 import FileNode from "../Nodes/FileNode";
 import FilterNode from "../Nodes/FilterNode";
 import { useAppDispatch } from "../../store";
 import { deleteNode } from "../../store/reducers/editorReducer";
 import SortNode from "../Nodes/SortNode";
+import SliceNode from "../Nodes/SliceNode";
 
 function CustomNode(props: CustomNodeProps) {
   const dispatch = useAppDispatch();
@@ -28,6 +29,8 @@ function CustomNode(props: CustomNodeProps) {
         <FilterNode {...props} />
       )}
       {props.data.typeOf === CustomeNodeType.SORT && <SortNode {...props} />}
+      {props.data.typeOf === CustomeNodeType.SLICE && <SliceNode {...props} />}
+
       <Handle type="source" position={Position.Right} />
     </div>
   );

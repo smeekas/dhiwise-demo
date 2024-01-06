@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type TableData = { [key: string]: string }[];
+export type TableData = { [key: string]: string }[];
 const initialState: {
   table: TableData;
 } = {

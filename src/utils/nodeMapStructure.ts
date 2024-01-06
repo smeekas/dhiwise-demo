@@ -2,8 +2,9 @@ import {
   CustomeNodeType,
   FileNodeType,
   FilterNodeType,
+  SliceNodeType,
   SortNodeType,
-} from "../types/customNode.type";
+} from "../types/customNode.types";
 import { Conditions } from "../types/filter.types";
 import { SortConditions } from "../types/sort.types";
 
@@ -11,8 +12,13 @@ type CommonForMap = { source: string | null; end: string | null };
 type FilterForMap = FilterNodeType & CommonForMap;
 type FileForMap = FileNodeType & CommonForMap;
 type SortForMap = SortNodeType & CommonForMap;
+type SliceForMap = SliceNodeType & CommonForMap;
 
-export type NodeTypeForMap = FilterForMap | FileForMap | SortForMap;
+export type NodeTypeForMap =
+  | FilterForMap
+  | FileForMap
+  | SortForMap
+  | SliceForMap;
 const nodes = new Map<string, NodeTypeForMap>();
 
 export const addEdgeToMap = (startId: string, endId: string) => {
@@ -92,6 +98,10 @@ export const runNode = (id: string) => {
           return 0;
         });
       }
+    } else if (nodeItem?.type === CustomeNodeType.SLICE) {
+      if (nodeItem.beginIndex != null && nodeItem.endIndex != null) {
+        tableData = tableData.slice(+nodeItem.beginIndex, +nodeItem.endIndex);
+      }
     }
   });
   return tableData;
@@ -112,7 +122,7 @@ export const updateNextNodesWithColumn = (id: string, columns: string[]) => {
   const idSet = new Set<string>();
   while (sourceId != null) {
     const nodeData = nodes.get(sourceId);
-    if (nodeData) {
+    if (nodeData && "allColumns" in nodeData) {
       nodeData.allColumns = [...columns];
       nodes.set(sourceId, nodeData);
       idSet.add(sourceId);

@@ -1,4 +1,4 @@
-import { CustomNodeProps } from "../../types/customNode.type";
+import { CustomNodeProps } from "../../types/customNode.types";
 import { ChangeEventHandler } from "react";
 import papa from "papaparse";
 import { useAppDispatch } from "../../store";

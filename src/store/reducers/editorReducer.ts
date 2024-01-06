@@ -5,8 +5,9 @@ import {
   CustomeNodeType,
   FilterNodeType,
   NodeData,
+  SliceNodeType,
   SortNodeType,
-} from "../../types/customNode.type";
+} from "../../types/customNode.types";
 import {
   addEdgeToMap,
   addNodeToMap,
@@ -39,6 +40,10 @@ export type UpdateFilterNodePayload = {
 export type UpdateSortNodePayload = {
   id: string;
 } & Partial<Omit<SortNodeType, "allColumns" | "type">>;
+
+export type UpdateSliceNodePayload = {
+  id: string;
+} & Partial<Omit<SliceNodeType, "type">>;
 export const editorSlice = createSlice({
   name: "editor",
   initialState,
@@ -76,6 +81,15 @@ export const editorSlice = createSlice({
             column: null,
             typeOfSort: SortConditions.ASC,
           };
+          break;
+        }
+        case CustomeNodeType.SLICE: {
+          nodeData.data.data = {
+            type: action.payload,
+            beginIndex: null,
+            endIndex: null,
+          };
+          break;
         }
       }
       const nodeForMap: NodeTypeForMap = {
@@ -110,24 +124,26 @@ export const editorSlice = createSlice({
       );
       if (indexOfNode > -1) {
         const sourceNode = state.nodes[indexOfNode].data.data;
-        updateNodeToMap(state.nodes[indexOfNode].id, {
-          allColumns: sourceNode?.allColumns,
-        });
-        const idSet = updateNextNodesWithColumn(
-          state.nodes[indexOfNode].id,
-          sourceNode?.allColumns ?? []
-        );
-        state.nodes.forEach((nodeItem) => {
-          if (idSet.has(nodeItem.id)) {
-            if (
-              nodeItem.data &&
-              nodeItem.data.data &&
-              "allColumns" in nodeItem.data.data
-            ) {
-              nodeItem.data.data.allColumns = sourceNode?.allColumns ?? [];
+        if (sourceNode && "allColumns" in sourceNode) {
+          updateNodeToMap(state.nodes[indexOfNode].id, {
+            allColumns: sourceNode?.allColumns,
+          });
+          const idSet = updateNextNodesWithColumn(
+            state.nodes[indexOfNode].id,
+            sourceNode?.allColumns ?? []
+          );
+          state.nodes.forEach((nodeItem) => {
+            if (idSet.has(nodeItem.id)) {
+              if (
+                nodeItem.data &&
+                nodeItem.data.data &&
+                "allColumns" in nodeItem.data.data
+              ) {
+                nodeItem.data.data.allColumns = sourceNode?.allColumns ?? [];
+              }
             }
-          }
-        });
+          });
+        }
       }
     },
     addFileNodeData: (state, action: PayloadAction<FileNodePayload>) => {
@@ -189,6 +205,22 @@ export const editorSlice = createSlice({
         }
       }
     },
+    updateSliceNodeData: (
+      state,
+      action: PayloadAction<UpdateSliceNodePayload>
+    ) => {
+      const nodeIndex = state.nodes.findIndex(
+        (nodeItem) => nodeItem.id === action.payload.id
+      );
+      if (nodeIndex > -1) {
+        const slice = state.nodes[nodeIndex];
+        if (slice.data?.data?.type === CustomeNodeType.SLICE) {
+          const { id, ...restData } = action.payload;
+          slice.data.data = { ...slice.data.data, ...restData };
+          updateNodeToMap(id, slice.data.data);
+        }
+      }
+    },
   },
 });
 
@@ -199,6 +231,7 @@ export const {
   updateFilterNodeData,
   addFileNodeData,
   deleteNode,
+  updateSliceNodeData,
   updateSortNodeData,
 } = editorSlice.actions;
 

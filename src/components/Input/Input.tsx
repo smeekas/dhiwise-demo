@@ -3,8 +3,9 @@ import React from "react";
 type InputProps = {
   onChange: (value: string) => void;
   label: string;
+  type?: React.HTMLInputTypeAttribute;
 };
-function Input({ label, onChange }: InputProps) {
+function Input({ label, onChange, type }: InputProps) {
   return (
     <section className="my-2">
       <label
@@ -14,7 +15,7 @@ function Input({ label, onChange }: InputProps) {
         {label}:
       </label>
       <input
-        type="text"
+        type={type ?? "text"}
         id={label}
         onChange={(e) => onChange(e.target.value)}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0.5"

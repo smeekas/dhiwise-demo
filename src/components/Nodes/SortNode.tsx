@@ -1,7 +1,7 @@
 import { useAppDispatch } from "../../store";
 import { updateSortNodeData } from "../../store/reducers/editorReducer";
 import { addTableData } from "../../store/reducers/tableReducer";
-import { CustomNodeProps, SortNodeType } from "../../types/customNode.type";
+import { CustomNodeProps, SortNodeType } from "../../types/customNode.types";
 import { SortConditions } from "../../types/sort.types";
 import { runNode } from "../../utils/nodeMapStructure";
 import Button from "../Button/Button";

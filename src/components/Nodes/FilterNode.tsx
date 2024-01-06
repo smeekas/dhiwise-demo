@@ -1,5 +1,4 @@
-import { CustomNodeProps, FilterNodeType } from "../../types/customNode.type";
-import { useState } from "react";
+import { CustomNodeProps, FilterNodeType } from "../../types/customNode.types";
 import Select from "../Select/Select";
 import Button from "../Button/Button";
 import { Conditions } from "../../types/filter.types";
@@ -10,12 +9,8 @@ import { updateFilterNodeData } from "../../store/reducers/editorReducer";
 import { addTableData } from "../../store/reducers/tableReducer";
 
 function FilterNode(props: CustomNodeProps) {
-  const [selectedColumn, setSelectedColumn] = useState<null | string>(null);
   const dispatch = useAppDispatch();
-  const [selectedCondition, setSelectedCondition] = useState<null | Conditions>(
-    null
-  );
-  const [, setEnteredCondition] = useState<null | string>(null);
+
   const onRunHandler = () => {
     const tableData = runNode(props.id);
     dispatch(addTableData(tableData));
@@ -27,15 +22,12 @@ function FilterNode(props: CustomNodeProps) {
         filterConditionType: value as Conditions,
       })
     );
-    setSelectedCondition(value as Conditions);
   };
   const onColumnChange = (value: string) => {
     dispatch(updateFilterNodeData({ id: props.id, column: value }));
-    setSelectedColumn(value);
   };
   const onEnteredConditionChange = (value: string) => {
     dispatch(updateFilterNodeData({ id: props.id, condition: value }));
-    setEnteredCondition(value);
   };
   const conditions = [
     Conditions.TEXT_EQUALS,
@@ -43,17 +35,17 @@ function FilterNode(props: CustomNodeProps) {
     Conditions.TEXT_NOT_EQUALS,
     Conditions.TEXT_NOT_INCLUDES,
   ];
-  const columns = (props.data.data as FilterNodeType).allColumns;
+  const nodeData = props.data.data as FilterNodeType;
   return (
     <div className="flex flex-col">
       <Select
-        options={columns.map((columnItem) => ({
+        options={nodeData.allColumns?.map((columnItem) => ({
           label: columnItem,
         }))}
         onChange={onColumnChange}
         label="Select a Column"
       />
-      {selectedColumn && (
+      {nodeData.column && (
         <Select
           onChange={onConditionChange}
           options={conditions.map((conditionItem) => ({
@@ -63,12 +55,12 @@ function FilterNode(props: CustomNodeProps) {
         />
       )}
 
-      {selectedColumn && selectedCondition && (
+      {nodeData.column && nodeData.filterConditionType && (
         <Input onChange={onEnteredConditionChange} label="Condition Name" />
       )}
-      {/* {selectedColumn && selectedCondition && ( */}
-      <Button onClick={onRunHandler}>Run</Button>
-      {/* )} */}
+      {nodeData.column &&
+        nodeData.filterConditionType &&
+        nodeData.condition && <Button onClick={onRunHandler}>Run</Button>}
     </div>
   );
 }

@@ -6,6 +6,7 @@ export enum CustomeNodeType {
   SORT = "Sort",
   FILTER = "Filter",
   FILE = "file",
+  SLICE = "slice",
 }
 export interface FilterNodeType {
   type: CustomeNodeType.FILTER;
@@ -25,9 +26,14 @@ export interface SortNodeType {
   column: string | null;
   typeOfSort: SortConditions;
 }
+export interface SliceNodeType {
+  type: CustomeNodeType.SLICE;
+  beginIndex: number | null;
+  endIndex: number | null;
+}
 export type NodeData = {
   readonly typeOf: CustomeNodeType;
-  data?: FilterNodeType | FileNodeType | SortNodeType;
+  data?: FilterNodeType | FileNodeType | SortNodeType | SliceNodeType;
 };
 
 export type CustomNodeData = NodeProps<NodeData>;
