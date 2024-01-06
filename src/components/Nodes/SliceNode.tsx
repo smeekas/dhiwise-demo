@@ -3,7 +3,7 @@ import Input from "../Input/Input";
 import { updateSliceNodeData } from "../../store/reducers/editorReducer";
 import { useAppDispatch } from "../../store";
 import Button from "../Button/Button";
-import { runNode } from "../../utils/nodeMapStructure";
+import { runNode } from "../../utils/nodeMap";
 import { addTableData } from "../../store/reducers/tableReducer";
 
 function SliceNode(props: CustomNodeProps) {

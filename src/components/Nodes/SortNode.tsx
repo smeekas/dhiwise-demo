@@ -3,7 +3,7 @@ import { updateSortNodeData } from "../../store/reducers/editorReducer";
 import { addTableData } from "../../store/reducers/tableReducer";
 import { CustomNodeProps, SortNodeType } from "../../types/customNode.types";
 import { SortConditions } from "../../types/sort.types";
-import { runNode } from "../../utils/nodeMapStructure";
+import { runNode } from "../../utils/nodeMap";
 import Button from "../Button/Button";
 import Select from "../Select/Select";
 

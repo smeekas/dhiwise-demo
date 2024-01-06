@@ -3,7 +3,7 @@ import Select from "../Select/Select";
 import Button from "../Button/Button";
 import { Conditions } from "../../types/filter.types";
 import Input from "../Input/Input";
-import { runNode } from "../../utils/nodeMapStructure";
+import { runNode } from "../../utils/nodeMap";
 import { useAppDispatch } from "../../store";
 import { updateFilterNodeData } from "../../store/reducers/editorReducer";
 import { addTableData } from "../../store/reducers/tableReducer";

@@ -15,7 +15,7 @@ import {
   NodeTypeForMap,
   updateNextNodesWithColumn,
   updateNodeToMap,
-} from "../../utils/nodeMapStructure";
+} from "../../utils/nodeMap";
 import { SortConditions } from "../../types/sort.types";
 
 export interface EditorState {
